@@ -69,8 +69,8 @@ export class MovimientosComponent implements OnInit {
       },
       error: (err: any) => {
         this.guardando = false;
-        console.error('Error completo:', err);
-        this.formError = err?.message || 'Error al registrar el movimiento';
+        const mensaje = err?.error?.details || err?.error?.error || err?.message || 'Error al registrar el movimiento';
+        this.formError = mensaje;
       }
     });
   }
