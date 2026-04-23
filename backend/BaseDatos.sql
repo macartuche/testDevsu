@@ -9,10 +9,10 @@ CREATE TABLE persona (
 );
 
 CREATE TABLE cliente (
-    cliente_id BIGINT UNIQUE NOT NULL,
+    cliente_id BIGSERIAL PRIMARY KEY,
     contrasena VARCHAR(255) NOT NULL,
     estado BOOLEAN DEFAULT TRUE,
-    id INTEGER PRIMARY KEY REFERENCES persona(id)
+    id INTEGER UNIQUE REFERENCES persona(id)
 );
 
 CREATE TABLE cuenta (

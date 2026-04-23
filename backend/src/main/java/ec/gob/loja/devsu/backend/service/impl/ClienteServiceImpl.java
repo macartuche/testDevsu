@@ -44,6 +44,15 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional
     public ClienteDTO create(ClienteDTO dto) {
         Cliente entity = mapper.toEntity(dto);
+        // Auto-generar clienteId si no viene
+        if (entity.getClienteId() == null) {
+            Long maxId = repository.findAll().stream()
+                    .map(Cliente::getClienteId)
+                    .filter(id -> id != null)
+                    .max(Long::compareTo)
+                    .orElse(0L);
+            entity.setClienteId(maxId + 1);
+        }
         // Buena práctica: cifrar la contraseña con BCrypt
         if (entity.getContrasena() != null && !entity.getContrasena().isEmpty()) {
             entity.setContrasena(encoder.encode(entity.getContrasena()));
