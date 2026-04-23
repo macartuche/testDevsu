@@ -2,7 +2,7 @@
   "info": {
     "name": "DevSu API",
     "description": "API para gestión de clientes, cuentas y movimientos bancarios",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.2.0/collection.json"
   },
   "variable": [
     {
