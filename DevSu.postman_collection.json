@@ -1,13 +1,14 @@
 {
   "info": {
+    "_postman_id": "devsu-local-collection",
     "name": "DevSu API",
     "description": "API para gestión de clientes, cuentas y movimientos bancarios",
-    "schema": "https://schema.getpostman.com/json/collection/v2.2.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8085/api",
+      "value": "http://localhost:8085",
       "type": "string"
     }
   ],
@@ -19,21 +20,28 @@
           "name": "Listar todos los clientes",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/clientes"
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes"]
+            }
           }
         },
         {
           "name": "Obtener cliente por ID",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/clientes/1"
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1"]
+            }
           }
         },
         {
           "name": "Crear cliente",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/clientes",
             "header": [
               {
                 "key": "Content-Type",
@@ -42,7 +50,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"genero\": \"M\",\n  \"edad\": 30,\n  \"identificacion\": \"9999999999\",\n  \"direccion\": \"Av. Principal 123\",\n  \"telefono\": \"0999999999\",\n  \"contrasena\": \"password123\",\n  \"estado\": true\n}"
+              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"genero\": \"M\",\n  \"edad\": 30,\n  \"identificacion\": \"9999999999\",\n  \"direccion\": \"Av. Principal 123\",\n  \"telefono\": \"0999999999\",\n  \"contrasena\": \"password123\",\n  \"estado\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes"]
             }
           }
         },
@@ -50,7 +68,6 @@
           "name": "Actualizar cliente",
           "request": {
             "method": "PUT",
-            "url": "{{baseUrl}}/clientes/1",
             "header": [
               {
                 "key": "Content-Type",
@@ -59,7 +76,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Juan Pérez Actualizado\",\n  \"genero\": \"M\",\n  \"edad\": 31,\n  \"identificacion\": \"0987654321\",\n  \"direccion\": \"Av. Secundaria 456\",\n  \"telefono\": \"0988888888\",\n  \"contrasena\": \"newpassword123\",\n  \"estado\": true\n}"
+              "raw": "{\n  \"nombre\": \"Juan Pérez Actualizado\",\n  \"genero\": \"M\",\n  \"edad\": 31,\n  \"identificacion\": \"0987654321\",\n  \"direccion\": \"Av. Secundaria 456\",\n  \"telefono\": \"0988888888\",\n  \"contrasena\": \"newpassword123\",\n  \"estado\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1"]
             }
           }
         },
@@ -67,7 +94,11 @@
           "name": "Eliminar cliente",
           "request": {
             "method": "DELETE",
-            "url": "{{baseUrl}}/clientes/4"
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "4"]
+            }
           }
         }
       ]
@@ -79,21 +110,28 @@
           "name": "Listar todas las cuentas",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/cuentas"
+            "url": {
+              "raw": "{{baseUrl}}/api/cuentas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cuentas"]
+            }
           }
         },
         {
           "name": "Obtener cuenta por número",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/cuentas/478758"
+            "url": {
+              "raw": "{{baseUrl}}/api/cuentas/478758",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cuentas", "478758"]
+            }
           }
         },
         {
           "name": "Crear cuenta",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/cuentas",
             "header": [
               {
                 "key": "Content-Type",
@@ -102,7 +140,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"999999\",\n  \"tipoCuenta\": \"Ahorros\",\n  \"saldoInicial\": 2000,\n  \"clienteId\": 1,\n  \"estado\": true\n}"
+              "raw": "{\n  \"numeroCuenta\": \"999999\",\n  \"tipoCuenta\": \"Ahorros\",\n  \"saldoInicial\": 2000,\n  \"clienteId\": 1,\n  \"estado\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cuentas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cuentas"]
             }
           }
         },
@@ -110,7 +158,6 @@
           "name": "Actualizar cuenta",
           "request": {
             "method": "PUT",
-            "url": "{{baseUrl}}/cuentas/478758",
             "header": [
               {
                 "key": "Content-Type",
@@ -119,7 +166,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"tipoCuenta\": \"Corriente\",\n  \"saldoInicial\": 2500,\n  \"clienteId\": 1,\n  \"estado\": true\n}"
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"tipoCuenta\": \"Corriente\",\n  \"saldoInicial\": 2500,\n  \"clienteId\": 1,\n  \"estado\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cuentas/478758",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cuentas", "478758"]
             }
           }
         },
@@ -127,7 +184,11 @@
           "name": "Eliminar cuenta",
           "request": {
             "method": "DELETE",
-            "url": "{{baseUrl}}/cuentas/999999"
+            "url": {
+              "raw": "{{baseUrl}}/api/cuentas/999999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cuentas", "999999"]
+            }
           }
         }
       ]
@@ -139,14 +200,17 @@
           "name": "Listar todos los movimientos",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/movimientos"
+            "url": {
+              "raw": "{{baseUrl}}/api/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movimientos"]
+            }
           }
         },
         {
           "name": "Crear depósito (crédito)",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/movimientos",
             "header": [
               {
                 "key": "Content-Type",
@@ -155,7 +219,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": 500\n}"
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": 500\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movimientos"]
             }
           }
         },
@@ -163,7 +237,6 @@
           "name": "Crear retiro (débito)",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/movimientos",
             "header": [
               {
                 "key": "Content-Type",
@@ -172,15 +245,24 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": -200\n}"
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": -200\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movimientos"]
             }
           }
         },
         {
-          "name": "ERROR: Retiro sin saldo",
+          "name": "ERROR: Retiro sin saldo disponible",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/movimientos",
             "header": [
               {
                 "key": "Content-Type",
@@ -189,7 +271,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": -5000\n}"
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": -5000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movimientos"]
             }
           }
         },
@@ -197,7 +289,6 @@
           "name": "ERROR: Cupo diario excedido",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/movimientos",
             "header": [
               {
                 "key": "Content-Type",
@@ -206,7 +297,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": -600\n}"
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": -600\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/movimientos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "movimientos"]
             }
           }
         }
@@ -216,12 +317,13 @@
       "name": "Reportes",
       "item": [
         {
-          "name": "Generar estado de cuenta",
+          "name": "Generar estado de cuenta PDF",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/reportes",
-              "host": ["{{baseUrl}}", "reportes"],
+              "raw": "{{baseUrl}}/api/reportes?clienteId=1&fechaInicio=2024-01-01&fechaFin=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reportes"],
               "query": [
                 {
                   "key": "clienteId",
