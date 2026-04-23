@@ -2,6 +2,7 @@ package ec.gob.loja.devsu.backend.service.impl;
 
 import ec.gob.loja.devsu.backend.domain.entity.Cliente;
 import ec.gob.loja.devsu.backend.domain.repository.ClienteRepository;
+import ec.gob.loja.devsu.backend.dto.ClienteCreateDTO;
 import ec.gob.loja.devsu.backend.dto.ClienteDTO;
 import ec.gob.loja.devsu.backend.mapper.ClienteMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,7 @@ class ClienteServiceImplTest {
 
     private Cliente mockCliente;
     private ClienteDTO mockDto;
+    private ClienteCreateDTO mockCreateDto;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +49,8 @@ class ClienteServiceImplTest {
         mockCliente.setContrasena("password");
         mockCliente.setEstado(true);
 
-        mockDto = new ClienteDTO(1L, "Juan Perez", "M", 30, "1234567890", "Quito", "0991234567", 100L, "password", true);
+        mockDto = new ClienteDTO(1L, "Juan Perez", "M", 30, "1234567890", "Quito", "0991234567", 100L, true);
+        mockCreateDto = new ClienteCreateDTO("Juan Perez", "M", 30, "1234567890", "Quito", "0991234567", "password", true);
     }
 
     @Test
@@ -81,11 +84,11 @@ class ClienteServiceImplTest {
 
     @Test
     void create_shouldSaveAndReturnCliente() {
-        when(mapper.toEntity(mockDto)).thenReturn(mockCliente);
+        when(mapper.toEntityFromCreate(mockCreateDto)).thenReturn(mockCliente);
         when(mapper.toDto(mockCliente)).thenReturn(mockDto);
         when(repository.save(mockCliente)).thenReturn(mockCliente);
 
-        ClienteDTO result = service.create(mockDto);
+        ClienteDTO result = service.create(mockCreateDto);
 
         assertNotNull(result);
         verify(repository).save(mockCliente);
@@ -97,7 +100,7 @@ class ClienteServiceImplTest {
         when(mapper.toDto(mockCliente)).thenReturn(mockDto);
         when(repository.save(mockCliente)).thenReturn(mockCliente);
 
-        ClienteDTO updateDto = new ClienteDTO(1L, "Juan Actualizado", "M", 30, "1234567890", "Quito", "0991234567", 100L, "password", true);
+        ClienteCreateDTO updateDto = new ClienteCreateDTO("Juan Actualizado", "M", 30, "1234567890", "Quito", "0988888888", "password", true);
 
         ClienteDTO result = service.update(100L, updateDto);
 
@@ -108,7 +111,8 @@ class ClienteServiceImplTest {
     void update_whenClienteNotExists_shouldThrowException() {
         when(repository.findByClienteId(999L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> service.update(999L, mockDto));
+        ClienteCreateDTO updateDto = new ClienteCreateDTO("Juan", "M", 30, "1234567890", "Quito", "0991234567", "pass", true);
+        assertThrows(IllegalArgumentException.class, () -> service.update(999L, updateDto));
     }
 
     @Test

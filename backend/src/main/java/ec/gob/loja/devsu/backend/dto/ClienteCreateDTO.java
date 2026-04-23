@@ -1,13 +1,12 @@
 package ec.gob.loja.devsu.backend.dto;
 
-public record ClienteDTO(
-        Long id,
+public record ClienteCreateDTO(
         String nombre,
         String genero,
         Integer edad,
         String identificacion,
         String direccion,
         String telefono,
-        Long clienteId,
+        String contrasena,
         Boolean estado
 ) {}

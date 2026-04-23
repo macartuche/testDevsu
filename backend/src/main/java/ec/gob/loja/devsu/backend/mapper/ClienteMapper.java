@@ -1,6 +1,7 @@
 package ec.gob.loja.devsu.backend.mapper;
 
 import ec.gob.loja.devsu.backend.domain.entity.Cliente;
+import ec.gob.loja.devsu.backend.dto.ClienteCreateDTO;
 import ec.gob.loja.devsu.backend.dto.ClienteDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -15,5 +16,10 @@ public interface ClienteMapper {
     Cliente toEntity(ClienteDTO dto);
 
     @Mapping(target = "id", ignore = true)
-    void updateEntity(ClienteDTO dto, @MappingTarget Cliente entity);
+    @Mapping(target = "clienteId", ignore = true)
+    Cliente toEntityFromCreate(ClienteCreateDTO dto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "clienteId", ignore = true)
+    void updateEntityFromCreate(ClienteCreateDTO dto, @MappingTarget Cliente entity);
 }

@@ -2,6 +2,7 @@ package ec.gob.loja.devsu.backend.service.impl;
 
 import ec.gob.loja.devsu.backend.domain.entity.Cliente;
 import ec.gob.loja.devsu.backend.domain.repository.ClienteRepository;
+import ec.gob.loja.devsu.backend.dto.ClienteCreateDTO;
 import ec.gob.loja.devsu.backend.dto.ClienteDTO;
 import ec.gob.loja.devsu.backend.service.ClienteService;
 import ec.gob.loja.devsu.backend.mapper.ClienteMapper;
@@ -42,9 +43,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public ClienteDTO create(ClienteDTO dto) {
-        Cliente entity = mapper.toEntity(dto);
-        // Auto-generar clienteId si no viene
+    public ClienteDTO create(ClienteCreateDTO dto) {
+        Cliente entity = mapper.toEntityFromCreate(dto);
         if (entity.getClienteId() == null) {
             Long maxId = repository.findAll().stream()
                     .map(Cliente::getClienteId)
@@ -53,7 +53,6 @@ public class ClienteServiceImpl implements ClienteService {
                     .orElse(0L);
             entity.setClienteId(maxId + 1);
         }
-        // Buena práctica: cifrar la contraseña con BCrypt
         if (entity.getContrasena() != null && !entity.getContrasena().isEmpty()) {
             entity.setContrasena(encoder.encode(entity.getContrasena()));
         }
@@ -62,10 +61,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public ClienteDTO update(Long clienteId, ClienteDTO dto) {
+    public ClienteDTO update(Long clienteId, ClienteCreateDTO dto) {
         return repository.findByClienteId(clienteId).map(entity -> {
-            mapper.updateEntity(dto, entity);
-            // Buena práctica: cifrar la contraseña con BCrypt
+            mapper.updateEntityFromCreate(dto, entity);
             if (entity.getContrasena() != null && !entity.getContrasena().isEmpty()) {
                 entity.setContrasena(encoder.encode(entity.getContrasena()));
             }

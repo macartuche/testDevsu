@@ -1,5 +1,6 @@
 package ec.gob.loja.devsu.backend.controller;
 
+import ec.gob.loja.devsu.backend.dto.ClienteCreateDTO;
 import ec.gob.loja.devsu.backend.dto.ClienteDTO;
 import ec.gob.loja.devsu.backend.service.ClienteService;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/clientes")
-@CrossOrigin(origins = "*") // Para Angular local
+@CrossOrigin(origins = "*")
 public class ClienteController {
 
     private final ClienteService clienteService;
@@ -30,12 +31,12 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> create(@RequestBody ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> create(@RequestBody ClienteCreateDTO dto) {
         return new ResponseEntity<>(clienteService.create(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{clienteId}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable Long clienteId, @RequestBody ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> update(@PathVariable Long clienteId, @RequestBody ClienteCreateDTO dto) {
         return ResponseEntity.ok(clienteService.update(clienteId, dto));
     }
 
