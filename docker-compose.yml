@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: testdevsu_db
+    environment:
+      POSTGRES_USER: devsu_user
+      POSTGRES_PASSWORD: devsu_password
+      POSTGRES_DB: devsu_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql
+    restart: on-failure
+
+  backend:
+    build:
+      context: ./backend
+    container_name: testdevsu_backend
+    ports:
+      - "8085:8085"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/devsu_db
+      SPRING_DATASOURCE_USERNAME: devsu_user
+      SPRING_DATASOURCE_PASSWORD: devsu_password
+      SERVER_PORT: 8085
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: testdevsu_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: on-failure
+
+volumes:
+  postgres_data:

@@ -1,0 +1,338 @@
+{
+  "info": {
+    "name": "DevSu API",
+    "description": "API para gestión de clientes, cuentas y movimientos bancarios",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8085/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Listar todos los clientes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clientes"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener cliente por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/clientes/:clienteId",
+              "host": ["{{baseUrl}}", "clientes"],
+              "path": [":clienteId"]
+            },
+            "variable": [
+              {
+                "key": "clienteId",
+                "value": "1"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Crear cliente",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/clientes",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"genero\": \"M\",\n  \"edad\": 30,\n  \"identificacion\": \"1234567890\",\n  \"direccion\": \"Av. Principal 123\",\n  \"telefono\": \"0999999999\",\n  \"clienteId\": 101,\n  \"contrasena\": \"password123\",\n  \"estado\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar cliente",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/clientes/:clienteId",
+              "host": ["{{baseUrl}}", "clientes"],
+              "path": [":clienteId"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Pérez Actualizado\",\n  \"genero\": \"M\",\n  \"edad\": 31,\n  \"identificacion\": \"1234567890\",\n  \"direccion\": \"Av. Secundaria 456\",\n  \"telefono\": \"0988888888\",\n  \"clienteId\": 101,\n  \"contrasena\": \"newpassword123\",\n  \"estado\": true\n}"
+            }
+          },
+          "variable": [
+            {
+              "key": "clienteId",
+              "value": "1"
+            }
+          ]
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cliente",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/clientes/:clienteId",
+              "host": ["{{baseUrl}}", "clientes"],
+              "path": [":clienteId"]
+            },
+            "variable": [
+              {
+                "key": "clienteId",
+                "value": "1"
+              }
+            ]
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cuentas",
+      "item": [
+        {
+          "name": "Listar todas las cuentas",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/cuentas"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener cuenta por número",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/cuentas/:numeroCuenta",
+              "host": ["{{baseUrl}}", "cuentas"],
+              "path": [":numeroCuenta"]
+            },
+            "variable": [
+              {
+                "key": "numeroCuenta",
+                "value": "478758"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Crear cuenta",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/cuentas",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"tipoCuenta\": \"Ahorros\",\n  \"saldoInicial\": 2000.00,\n  \"clienteId\": 1,\n  \"estado\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar cuenta",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/cuentas/:numeroCuenta",
+              "host": ["{{baseUrl}}", "cuentas"],
+              "path": [":numeroCuenta"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"tipoCuenta\": \"Corriente\",\n  \"saldoInicial\": 2500.00,\n  \"clienteId\": 1,\n  \"estado\": true\n}"
+            }
+          },
+          "variable": [
+            {
+              "key": "numeroCuenta",
+              "value": "478758"
+            }
+          ]
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cuenta",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/cuentas/:numeroCuenta",
+              "host": ["{{baseUrl}}", "cuentas"],
+              "path": [":numeroCuenta"]
+            },
+            "variable": [
+              {
+                "key": "numeroCuenta",
+                "value": "478758"
+              }
+            ]
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Movimientos",
+      "item": [
+        {
+          "name": "Listar todos los movimientos",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/movimientos"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear depósito (crédito positivo)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/movimientos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": 500.00\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear retiro (débito negativo)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/movimientos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": -200.00\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR: Retiro sin saldo disponible",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/movimientos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": -5000.00\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ERROR: Cupo diario excedido",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/movimientos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"478758\",\n  \"movimiento\": -600.00\n}"
+            },
+            "description": "Si ya se han hecho retiros por más de $1000 hoy, devolverá error de cupo diario excedido"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Generar reporte de estado de cuenta",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reportes?clienteId={{clienteId}}&fechaInicio={{fechaInicio}}&fechaFin={{fechaFin}}",
+              "host": ["{{baseUrl}}", "reportes"],
+              "query": [
+                {
+                  "key": "clienteId",
+                  "value": "{{clienteId}}"
+                },
+                {
+                  "key": "fechaInicio",
+                  "value": "{{fechaInicio}}"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "{{fechaFin}}"
+                }
+              ]
+            },
+            "variable": [
+              {
+                "key": "clienteId",
+                "value": "1"
+              },
+              {
+                "key": "fechaInicio",
+                "value": "2024-01-01"
+              },
+              {
+                "key": "fechaFin",
+                "value": "2024-12-31"
+              }
+            ]
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

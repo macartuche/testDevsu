@@ -1,0 +1,136 @@
+<div class="page-header">
+  <div class="page-title">Gestión de Cuentas</div>
+  <div class="page-subtitle">Administra las cuentas bancarias de los clientes</div>
+</div>
+
+<div class="card">
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <input class="form-control" style="width:240px" placeholder="🔍  Buscar por número o cliente..."
+        (input)="filtrar($event)" />
+    </div>
+    <button class="btn btn-primary" (click)="abrirModal()">+ Nueva Cuenta</button>
+  </div>
+
+  @if (error) {
+    <div class="alert alert-danger">{{ error }}</div>
+  }
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nro. Cuenta</th>
+          <th>Tipo</th>
+          <th>Saldo Inicial</th>
+          <th>Cliente</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of cuentasFiltradas; track c.id) {
+          <tr>
+            <td><strong>{{ c.numeroCuenta }}</strong></td>
+            <td>
+              <span [class]="c.tipoCuenta === 'Ahorros' ? 'badge badge-success' : 'badge badge-info'">
+                {{ c.tipoCuenta }}
+              </span>
+            </td>
+            <td><strong>${{ c.saldoInicial | number:'1.2-2' }}</strong></td>
+            <td>{{ c.clienteNombre }}</td>
+            <td>
+              <span [class]="c.estado ? 'badge badge-success' : 'badge badge-danger'">
+                {{ c.estado ? 'Activa' : 'Inactiva' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-outline btn-sm" (click)="editar(c)" style="margin-right:6px">✏️ Editar</button>
+              <button class="btn btn-danger btn-sm" (click)="eliminar(c)">🗑️</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" style="text-align:center;color:var(--text-muted);padding:30px">
+              No se encontraron cuentas
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (modalVisible) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">{{ editando ? 'Editar Cuenta' : 'Nueva Cuenta' }}</span>
+        <button class="modal-close" (click)="cerrarModal()">✕</button>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div class="modal-body">
+          @if (formError) {
+            <div class="alert alert-danger">{{ formError }}</div>
+          }
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Número de Cuenta *</label>
+              <input class="form-control" formControlName="numeroCuenta" placeholder="Ej: 478758" [readonly]="editando"
+                     [class.is-invalid]="form.get('numeroCuenta')?.invalid && form.get('numeroCuenta')?.touched" />
+              @if (form.get('numeroCuenta')?.hasError('required') && form.get('numeroCuenta')?.touched) {
+                <small class="error-text">El número de cuenta es requerido</small>
+              }
+            </div>
+            <div class="form-group">
+              <label>Tipo *</label>
+              <select class="form-control" formControlName="tipoCuenta"
+                      [class.is-invalid]="form.get('tipoCuenta')?.invalid && form.get('tipoCuenta')?.touched">
+                <option value="">Seleccionar</option>
+                <option>Ahorros</option>
+                <option>Corriente</option>
+              </select>
+              @if (form.get('tipoCuenta')?.hasError('required') && form.get('tipoCuenta')?.touched) {
+                <small class="error-text">El tipo de cuenta es requerido</small>
+              }
+            </div>
+            <div class="form-group">
+              <label>Saldo Inicial *</label>
+              <input class="form-control" type="number" step="0.01" formControlName="saldoInicial" placeholder="0.00"
+                     [class.is-invalid]="form.get('saldoInicial')?.invalid && form.get('saldoInicial')?.touched" />
+              @if (form.get('saldoInicial')?.hasError('required') && form.get('saldoInicial')?.touched) {
+                <small class="error-text">El saldo inicial es requerido</small>
+              }
+              @if (form.get('saldoInicial')?.hasError('min') && form.get('saldoInicial')?.touched) {
+                <small class="error-text">El saldo no puede ser negativo</small>
+              }
+            </div>
+            <div class="form-group">
+              <label>Cliente *</label>
+              <select class="form-control" formControlName="clienteId"
+                      [class.is-invalid]="form.get('clienteId')?.invalid && form.get('clienteId')?.touched">
+                <option value="">Seleccionar</option>
+                @for (cl of clientes; track cl.id) {
+                  <option [value]="cl.clienteId">{{ cl.nombre }}</option>
+                }
+              </select>
+              @if (form.get('clienteId')?.hasError('required') && form.get('clienteId')?.touched) {
+                <small class="error-text">Debe seleccionar un cliente</small>
+              }
+            </div>
+          </div>
+          <div class="form-group" style="flex-direction:row;align-items:center;gap:10px">
+            <input type="checkbox" formControlName="estado" id="estadoCuenta" style="width:16px;height:16px;cursor:pointer" />
+            <label for="estadoCuenta" style="text-transform:none;font-size:13px;cursor:pointer">Cuenta activa</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

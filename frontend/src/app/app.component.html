@@ -1,0 +1,30 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🏦</div>
+      <span class="brand-name">BancoDevsu</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a routerLink="/clientes" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">👤</span>
+        <span>Clientes</span>
+      </a>
+      <a routerLink="/cuentas" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">💳</span>
+        <span>Cuentas</span>
+      </a>
+      <a routerLink="/movimientos" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">↕️</span>
+        <span>Movimientos</span>
+      </a>
+      <a routerLink="/reportes" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span>Reportes</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">v1.0.0 &copy; Devsu</div>
+  </aside>
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>

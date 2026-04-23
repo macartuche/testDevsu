@@ -1,0 +1,116 @@
+<div class="page-header">
+  <div class="page-title">Movimientos</div>
+  <div class="page-subtitle">Registra débitos y créditos de las cuentas bancarias</div>
+</div>
+
+<div class="card">
+  <div class="toolbar">
+    <div class="toolbar-left"></div>
+    <button class="btn btn-primary" (click)="abrirModal()">+ Nuevo Movimiento</button>
+  </div>
+
+  @if (error) {
+    <div class="alert alert-danger">{{ error }}</div>
+  }
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Nro. Cuenta</th>
+          <th>Tipo</th>
+          <th>Saldo Inicial</th>
+          <th>Movimiento</th>
+          <th>Saldo Final</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (m of movimientos; track m.id) {
+          <tr>
+            <td>{{ m.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ m.cliente }}</td>
+            <td>{{ m.numeroCuenta }}</td>
+            <td>
+              <span [class]="m.tipo === 'Ahorros' ? 'badge badge-success' : 'badge badge-info'">
+                {{ m.tipo }}
+              </span>
+            </td>
+            <td>${{ m.saldoInicial | number:'1.2-2' }}</td>
+            <td>
+              <strong [style.color]="(m.movimiento || 0) >= 0 ? 'var(--success)' : 'var(--danger)'">
+                {{ (m.movimiento || 0) >= 0 ? '+' : '' }}${{ m.movimiento | number:'1.2-2' }}
+              </strong>
+            </td>
+            <td>${{ m.saldoDisponible | number:'1.2-2' }}</td>
+            <td>
+              <span [class]="m.estado ? 'badge badge-success' : 'badge badge-danger'">
+                {{ m.estado ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8" style="text-align:center;color:var(--text-muted);padding:30px">
+              No hay movimientos registrados
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (modalVisible) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">Registrar Movimiento</span>
+        <button class="modal-close" (click)="cerrarModal()">✕</button>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div class="modal-body">
+          @if (formError) {
+            <div class="alert alert-danger">{{ formError }}</div>
+          }
+          <div class="form-group">
+            <label>Cuenta *</label>
+            <select class="form-control" formControlName="numeroCuenta"
+                    [class.is-invalid]="form.get('numeroCuenta')?.invalid && form.get('numeroCuenta')?.touched">
+              <option value="">Seleccionar cuenta</option>
+              @for (c of cuentas; track c.id) {
+                <option [value]="c.numeroCuenta">
+                  {{ c.numeroCuenta }} — {{ c.clienteNombre }} (${{ c.saldoInicial | number:'1.2-2' }})
+                </option>
+              }
+            </select>
+            @if (form.get('numeroCuenta')?.hasError('required') && form.get('numeroCuenta')?.touched) {
+              <small class="error-text">Debe seleccionar una cuenta</small>
+            }
+          </div>
+          <div class="form-group">
+            <label>Valor del movimiento *</label>
+            <input class="form-control" type="number" step="0.01" formControlName="movimiento"
+              placeholder="Positivo = Depósito  |  Negativo = Retiro"
+              [class.is-invalid]="form.get('movimiento')?.invalid && form.get('movimiento')?.touched" />
+            @if (form.get('movimiento')?.hasError('required') && form.get('movimiento')?.touched) {
+              <small class="error-text">El valor del movimiento es requerido</small>
+            }
+            <small style="color:var(--text-muted)">Usa valor negativo para débitos (retiros)</small>
+          </div>
+          <div style="background:var(--bg);border-radius:8px;padding:12px;font-size:12px;color:var(--text-muted)">
+            ⚠️ El límite diario de retiro es <strong style="color:var(--warn)">$1.000,00</strong>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || guardando">
+            {{ guardando ? 'Procesando...' : 'Registrar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

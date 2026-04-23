@@ -1,0 +1,28 @@
+# Archivos de requerimientos y prueba técnica
+Arquitectura.md
+*.png
+*.jpg
+*.jpeg
+.gemini/
+.DS_Store
+
+# Java / Spring Boot
+backend/target/
+backend/!**/src/main/**/target/
+backend/!**/src/test/**/target/
+*.jar
+*.war
+*.ear
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/.idea/
+backend/.vscode/
+backend/*.iml
+
+# Angular / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.idea/
+frontend/.vscode/

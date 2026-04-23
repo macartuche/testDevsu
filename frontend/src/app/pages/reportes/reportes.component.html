@@ -1,0 +1,112 @@
+<div class="page-header">
+  <div class="page-title">Estado de Cuenta</div>
+  <div class="page-subtitle">Genera reportes de movimientos por cliente y rango de fechas</div>
+</div>
+
+<div class="card" style="margin-bottom:20px">
+  <form [formGroup]="form" (ngSubmit)="generar()">
+    <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end">
+      <div class="form-group" style="flex:1;min-width:180px">
+        <label>Cliente *</label>
+        <select class="form-control" formControlName="clienteId"
+                [class.is-invalid]="form.get('clienteId')?.invalid && form.get('clienteId')?.touched">
+          <option value="">Seleccionar cliente</option>
+          @for (c of clientes; track c.id) {
+            <option [value]="c.clienteId">{{ c.nombre }}</option>
+          }
+        </select>
+        @if (form.get('clienteId')?.hasError('required') && form.get('clienteId')?.touched) {
+          <small class="error-text">Debe seleccionar un cliente</small>
+        }
+      </div>
+      <div class="form-group" style="flex:1;min-width:160px">
+        <label>Fecha Inicio *</label>
+        <input class="form-control" type="date" formControlName="fechaInicio"
+               [class.is-invalid]="form.get('fechaInicio')?.invalid && form.get('fechaInicio')?.touched" />
+        @if (form.get('fechaInicio')?.hasError('required') && form.get('fechaInicio')?.touched) {
+          <small class="error-text">La fecha de inicio es requerida</small>
+        }
+      </div>
+      <div class="form-group" style="flex:1;min-width:160px">
+        <label>Fecha Fin *</label>
+        <input class="form-control" type="date" formControlName="fechaFin"
+               [class.is-invalid]="form.get('fechaFin')?.invalid && form.get('fechaFin')?.touched" />
+        @if (form.get('fechaFin')?.hasError('required') && form.get('fechaFin')?.touched) {
+          <small class="error-text">La fecha fin es requerida</small>
+        }
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid || cargando" style="height:38px">
+        {{ cargando ? 'Generando...' : '📊 Generar Reporte' }}
+      </button>
+      @if (movimientos.length > 0) {
+        <button type="button" class="btn btn-success" (click)="descargarPdf()" style="height:38px">
+          📥 Descargar PDF
+        </button>
+      }
+    </div>
+  </form>
+</div>
+
+@if (error) {
+  <div class="alert alert-danger">{{ error }}</div>
+}
+
+@if (movimientos.length > 0) {
+  <div class="card">
+    <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:13px;color:var(--text-muted)">
+        {{ movimientos.length }} movimiento(s) encontrados
+      </span>
+      <span class="badge badge-info">Período seleccionado</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Nro. Cuenta</th>
+            <th>Tipo</th>
+            <th>Saldo Inicial</th>
+            <th>Movimiento</th>
+            <th>Saldo Disponible</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (m of movimientos; track $index) {
+            <tr>
+              <td>{{ m.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ m.cliente }}</td>
+              <td>{{ m.numeroCuenta }}</td>
+              <td>
+                <span [class]="m.tipo === 'Ahorros' ? 'badge badge-success' : 'badge badge-info'">
+                  {{ m.tipo }}
+                </span>
+              </td>
+              <td>${{ m.saldoInicial | number:'1.2-2' }}</td>
+              <td>
+                <strong [style.color]="m.movimiento >= 0 ? 'var(--success)' : 'var(--danger)'">
+                  {{ m.movimiento >= 0 ? '+' : '' }}${{ m.movimiento | number:'1.2-2' }}
+                </strong>
+              </td>
+              <td>${{ m.saldoDisponible | number:'1.2-2' }}</td>
+              <td>
+                <span [class]="m.estado ? 'badge badge-success' : 'badge badge-danger'">
+                  {{ m.estado ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+}
+
+@if (!cargando && movimientos.length === 0 && buscado) {
+  <div class="card" style="text-align:center;padding:48px;color:var(--text-muted)">
+    <div style="font-size:40px;margin-bottom:12px">📭</div>
+    <div>No hay movimientos en el período seleccionado</div>
+  </div>
+}

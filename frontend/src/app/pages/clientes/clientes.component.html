@@ -1,0 +1,136 @@
+<div class="page-header">
+  <div class="page-title">Gestión de Clientes</div>
+  <div class="page-subtitle">Administra los clientes del sistema bancario</div>
+</div>
+
+<div class="card">
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <input class="form-control" style="width:240px" placeholder="🔍  Buscar cliente..."
+        (input)="filtrar($event)" />
+    </div>
+    <button class="btn btn-primary" (click)="abrirModal()">+ Nuevo Cliente</button>
+  </div>
+
+  @if (error) {
+    <div class="alert alert-danger">{{ error }}</div>
+  }
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Identificación</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of clientesFiltrados; track c.id) {
+          <tr>
+            <td><span class="chip badge-info">#{{ c.clienteId }}</span></td>
+            <td><strong>{{ c.nombre }}</strong></td>
+            <td>{{ c.identificacion }}</td>
+            <td>{{ c.telefono }}</td>
+            <td>{{ c.direccion }}</td>
+            <td>
+              <span [class]="c.estado ? 'badge badge-success' : 'badge badge-danger'">
+                {{ c.estado ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-outline btn-sm" (click)="editar(c)" style="margin-right:6px">✏️ Editar</button>
+              <button class="btn btn-danger btn-sm" (click)="eliminar(c)">🗑️</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px">
+              No se encontraron clientes
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (modalVisible) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">{{ editando ? 'Editar Cliente' : 'Nuevo Cliente' }}</span>
+        <button class="modal-close" (click)="cerrarModal()">✕</button>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div class="modal-body">
+          @if (formError) {
+            <div class="alert alert-danger">{{ formError }}</div>
+          }
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Nombre *</label>
+              <input class="form-control" formControlName="nombre" placeholder="Nombre completo" 
+                     [class.is-invalid]="form.get('nombre')?.invalid && form.get('nombre')?.touched" />
+              @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+                <small class="error-text">El nombre es requerido</small>
+              }
+            </div>
+            <div class="form-group">
+              <label>Identificación *</label>
+              <input class="form-control" formControlName="identificacion" placeholder="Cédula/RUC"
+                     [class.is-invalid]="form.get('identificacion')?.invalid && form.get('identificacion')?.touched" />
+              @if (form.get('identificacion')?.hasError('required') && form.get('identificacion')?.touched) {
+                <small class="error-text">La identificación es requerida</small>
+              }
+            </div>
+            <div class="form-group">
+              <label>Género</label>
+              <select class="form-control" formControlName="genero">
+                <option value="">Seleccionar</option>
+                <option>Masculino</option>
+                <option>Femenino</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Edad</label>
+              <input class="form-control" type="number" formControlName="edad" placeholder="Ej: 30"
+                     [class.is-invalid]="form.get('edad')?.invalid && form.get('edad')?.touched" />
+              @if (form.get('edad')?.hasError('min') && form.get('edad')?.touched) {
+                <small class="error-text">La edad debe ser mayor a 0</small>
+              }
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input class="form-control" formControlName="telefono" placeholder="09XXXXXXXX"
+                     [class.is-invalid]="form.get('telefono')?.invalid && form.get('telefono')?.touched" />
+            </div>
+            <div class="form-group">
+              <label>Contraseña</label>
+              <input class="form-control" type="password" formControlName="contrasena" placeholder="••••" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Dirección</label>
+            <input class="form-control" formControlName="direccion" placeholder="Calle principal y secundaria" />
+          </div>
+          <div class="form-group" style="flex-direction:row;align-items:center;gap:10px">
+            <input type="checkbox" formControlName="estado" id="estado" style="width:16px;height:16px;cursor:pointer" />
+            <label for="estado" style="text-transform:none;font-size:13px;cursor:pointer">Cliente activo</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
